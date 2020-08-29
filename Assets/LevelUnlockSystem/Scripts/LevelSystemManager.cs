@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 /// <summary>
 /// This script hold the level data scriptable object and its Singleton and dont get deleted on scene change
@@ -10,8 +11,10 @@ namespace LevelUnlockSystem
         private static LevelSystemManager instance;                             //instance variable
         public static LevelSystemManager Instance { get => instance; }          //instance getter
 
-        [SerializeField] private LevelDataScriptable levelScriptableData;       //hold the scriptable level data
-        public LevelDataScriptable LevelsData { get => levelScriptableData; }   //getter
+        [Tooltip("Set the default Level data so when game start 1st time, this data will be saved")]
+        [SerializeField] private LevelData levelData;
+
+        public LevelData LevelData { get => levelData; }   //getter
 
         private int currentLevel;                                               //keep track of current level player is playing
         public int CurrentLevel { get => currentLevel; set => currentLevel = value; }   //getter and setter for currentLevel
@@ -30,11 +33,25 @@ namespace LevelUnlockSystem
             }
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                SaveLoadData.Instance.SaveData();
+            }
+        }
+
+        private void OnEnable()
+        {
+            SaveLoadData.Instance.Initialize();
+        }
+
         public void LevelComplete(int starAchieved)                             //method called when player win the level
         {
-            levelScriptableData.levelData[currentLevel].starAchieved = starAchieved;    //save the stars achieved by the player in level
-            levelScriptableData.lastUnlockedLevel = currentLevel + 1;           //change the lastUnlockedLevel to next level
-            levelScriptableData.levelData[levelScriptableData.lastUnlockedLevel].unlocked = true; //and make next level unlock true
+            levelData.levelItemArray[currentLevel].starAchieved = starAchieved;    //save the stars achieved by the player in level
+            levelData.lastUnlockedLevel = currentLevel + 1;           //change the lastUnlockedLevel to next level
+                                                                               //and make next level unlock true
+            levelData.levelItemArray[levelData.lastUnlockedLevel].unlocked = true; 
         }
     }
 }

@@ -29,7 +29,7 @@ namespace LevelUnlockSystem
         /// <param name="value">Level Data</param>
         /// <param name="index">Level index</param>
         /// /// <param name="activeLevel">Bool used to identify the active level</param>
-        public void SetLevelButton(LevelData value, int index, bool activeLevel)        
+        public void SetLevelButton(LevelItem value, int index, bool activeLevel)        
         {
             if (value.unlocked)                                     //if unlocked is true
             {
